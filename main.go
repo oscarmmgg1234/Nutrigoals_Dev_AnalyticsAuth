@@ -1,6 +1,7 @@
 package main
 
 import (
+	
 	"net/http"
 	"fmt"
 	"log"
@@ -10,7 +11,7 @@ var port string = ":5005"
 
 var emails = [2]string{"oscarmmgg1234@gmail.com","edwardcordero@gmail.com"}
 var passwords = [2]string{"oscarTester23","edwardTester25"}
-
+var jsonStr string = `{"title":"Buy cheese and bread for breakfast."}`
 
 func credentialValidation(username string, password string) bool { 
 var result bool = false
@@ -36,9 +37,9 @@ rUsername := r.Header.Get("username")
 rPassword := r.Header.Get("password")
 result := credentialValidation(rUsername, rPassword)
 if result == true {
-	fmt.Fprintf(w, "{valid: true}")
+	fmt.Fprintf(w, jsonStr)
 } else {
-	fmt.Fprintf(w, "{valid: false}")
+	fmt.Fprintf(w, jsonStr)
 }
 
 
