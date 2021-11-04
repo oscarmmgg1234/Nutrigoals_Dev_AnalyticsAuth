@@ -1,10 +1,11 @@
 package main
 
 import (
-	
+	"github.com/gorilla/mux"
 	"net/http"
 	"fmt"
 	"log"
+	"time"
 )
 
 var port string = ":5005"
@@ -45,16 +46,17 @@ if result == true {
 
 }
 
-func handleRequest(){
-	http.HandleFunc("/auth", userValidation)
-}
-
-
-
 
 func main(){
+	router := mux.NewRouter()
+	srv := &http.Server{
+		Handler: router,
+		Addr:    "127.0.0.1:5005",
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+	router.HandleFunc("/auth", userValidation).Methods("GET")
 	
-	handleRequest()
-	log.Fatal(http.ListenAndServe(port, nil))
+	log.Fatal(srv.ListenAndServe())
 
 }
