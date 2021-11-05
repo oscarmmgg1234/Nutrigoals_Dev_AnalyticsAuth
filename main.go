@@ -49,14 +49,9 @@ if result == true {
 
 func main(){
 	router := mux.NewRouter()
-	srv := &http.Server{
-		Handler: router,
-		Addr:    "127.0.0.1:5005",
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
-	}
+	
 	router.HandleFunc("/auth", userValidation).Methods("GET")
 	
-	log.Fatal(srv.ListenAndServe())
+	log.Fatal(http.ListenAndServe(port, nil))
 
 }
