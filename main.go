@@ -1,18 +1,19 @@
 package main
 
 import (
+	
 	"github.com/gorilla/mux"
 	"net/http"
-	"fmt"
 	"log"
-	"time"
 )
 
 var port string = ":5005"
 
 var emails = [2]string{"oscarmmgg1234@gmail.com","edwardcordero@gmail.com"}
 var passwords = [2]string{"oscarTester23","edwardTester25"}
-var jsonStr string = `{"title":"Buy cheese and bread for breakfast."}`
+
+var isValid = `{"authorized" : "true"}`
+var notValid = `{"authorized" : "false"}`
 
 func credentialValidation(username string, password string) bool { 
 var result bool = false
@@ -37,10 +38,12 @@ func userValidation(w http.ResponseWriter, r* http.Request){
 rUsername := r.Header.Get("username")
 rPassword := r.Header.Get("password")
 result := credentialValidation(rUsername, rPassword)
+w.Header().Set("Content-Type", "application/json")
+
 if result == true {
-	fmt.Fprintf(w, jsonStr)
+	w.Write([]byte(isValid))
 } else {
-	fmt.Fprintf(w, jsonStr)
+	w.Write([]byte(notValid))
 }
 
 
@@ -51,7 +54,7 @@ func main(){
 	router := mux.NewRouter()
 	
 	router.HandleFunc("/auth", userValidation).Methods("GET")
-	
-	log.Fatal(http.ListenAndServe(port, nil))
+
+		log.Fatal(http.ListenAndServe(port, router))
 
 }
